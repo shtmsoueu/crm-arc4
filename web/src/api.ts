@@ -1,8 +1,9 @@
 export type Saude = {
   status: 'ok' | 'degradado';
   versao: string;
-  banco: 'ok' | 'indisponivel';
+  banco: 'ok' | 'indisponivel' | 'nao_configurado';
   migracao: string | null;
+  migracao_erro?: string | null;
 };
 
 /** GET /api/health. 503 também traz corpo (banco indisponível), então não é tratado como exceção. */

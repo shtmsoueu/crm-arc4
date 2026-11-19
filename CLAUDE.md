@@ -48,7 +48,7 @@ Onde fica cada coisa:
 
 - Dicionário de colunas (fonte única): `importador/src/arc4_importador/layout.py`, parcial até termos os cabeçalhos reais (D-004).
 - Gerador de fixtures: `importador/src/arc4_importador/fixtures.py`. Novos casos de borda entram aqui e no `manifesto.json`.
-- Migrations: `db/migrations/versions/` + SQL em `db/migrations/sql/`. Nunca edite uma migration já aplicada: crie outra.
+- Migrations: `db/migrations/versions/` + SQL em `db/migrations/sql/`. Nunca edite uma migration já aplicada: crie outra. A API aplica as migrations sozinha ao subir (D-007), então elas precisam ser curtas e transacionais.
 
 ## Dados sensíveis — regras obrigatórias
 

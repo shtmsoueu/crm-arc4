@@ -70,7 +70,7 @@ A migration parte de `docs/modelo/schema_postgresql.sql` com estes ajustes:
 
 **Consequências.**
 - O importador (Fase 2) **não** roda na Vercel, por causa do limite de 4,5 MB por requisição e de 300 s por função. Ele roda como CLI (máquina autorizada ou GitHub Actions) e grava direto no banco.
-- Migrations são aplicadas explicitamente (`make migrate`), nunca na inicialização da função.
+- Migrations: **revisado em 2026-11-19.** A API aplica as migrations sozinha na primeira requisição de cada instância (`api/src/arc4_api/migracao.py`), com *advisory lock* no PostgreSQL. Assim, várias instâncias subindo juntas não conflitam, e o Alembic não reaplica o que já existe. O motivo é que a Vercel não tem terminal, e exigir `make migrate` da máquina de quem opera era uma barreira. Para desligar e aplicar à mão: `ARC4_AUTO_MIGRATE=0`. Migrations novas devem continuar curtas e transacionais; uma migration pesada sobre dados grandes precisa ser aplicada fora da função.
 - A auditoria fica no banco, porque os logs da plataforma duram 1 hora no plano gratuito.
 
 **Pendente.** Confirmar se o plano Hobby permite uso comercial e obter o aval de LGPD antes de usar dados reais. Reavaliar a hospedagem antes da Fase 6 (operação paralela com cargas reais).
