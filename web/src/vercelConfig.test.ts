@@ -1,3 +1,5 @@
+// @vitest-environment node
+// Lê o arquivo de configuração do disco: precisa do ambiente node (no jsdom, import.meta.url não é file:).
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
