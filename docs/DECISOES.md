@@ -10,6 +10,7 @@ Registro de decisões técnicas e de negócio: data, decisão, motivo e situaç�
 | D-004 | 2026-11-19 | Adotada; pendência antes da F2.2 |
 | D-005 | 2026-11-19 | Adotada |
 | D-006 | 2026-11-19 | Adotada |
+| D-007 | 2026-11-19 | Adotada (no momento) |
 | R-001…R-004 | 2026-11-19 | Riscos para as próximas fases |
 
 ---
@@ -60,6 +61,19 @@ A migration parte de `docs/modelo/schema_postgresql.sql` com estes ajustes:
 **Decisão.** Os testes geram os 27 ZIPs sintéticos em tempo de execução (`arc4_importador.fixtures`, semente fixa, saída determinística) e conferem o conteúdo lendo os ZIPs de volta. `make fixtures` grava uma cópia em `importador/tests/.fixtures/` (ignorada pelo Git).
 
 **Motivo.** O repositório não guarda binários e não há risco de um ZIP real ser confundido com fixture. Os valores de domínio (estratégias, produtos, grupos, status) são plausíveis, mas **não** representam regras aprovadas: não use as fixtures como fonte de dicionário de domínio.
+
+## D-007 · Hospedagem na Vercel, importador fora dela
+
+**Decisão.** Por ora, o ARC4 é hospedado na Vercel num **projeto único** (`crm-arc4`, com a raiz do repositório como Root Directory). O frontend é publicado como estático (`web/dist`), e a API roda como função Python em `api/app.py`. O `vercel.json` da raiz reescreve `/api/*` e `/health` para a função. O banco é o Neon (PostgreSQL). Passo a passo em `docs/DEPLOY_VERCEL.md`.
+
+**Motivo.** É a hospedagem que o time já usa. Num projeto só, o domínio é único (sem CORS) e há só uma configuração para manter. A primeira versão previa dois projetos (`web/` e `api/`), mas o projeto foi criado na raiz e a configuração foi ajustada a ele.
+
+**Consequências.**
+- O importador (Fase 2) **não** roda na Vercel, por causa do limite de 4,5 MB por requisição e de 300 s por função. Ele roda como CLI (máquina autorizada ou GitHub Actions) e grava direto no banco.
+- Migrations são aplicadas explicitamente (`make migrate`), nunca na inicialização da função.
+- A auditoria fica no banco, porque os logs da plataforma duram 1 hora no plano gratuito.
+
+**Pendente.** Confirmar se o plano Hobby permite uso comercial e obter o aval de LGPD antes de usar dados reais. Reavaliar a hospedagem antes da Fase 6 (operação paralela com cargas reais).
 
 ---
 
