@@ -1,4 +1,4 @@
-"""A entrada usada pela Vercel (api/app.py) expõe a mesma aplicação, sem depender do pacote instalado."""
+"""Entrada da Vercel: api/app.py expõe a aplicação e o vercel.json da raiz encaminha /api para ela."""
 
 import subprocess
 import sys
@@ -18,13 +18,14 @@ def test_app_py_expoe_fastapi_sem_instalar_o_pacote():
     subprocess.run([sys.executable, "-I", "-c", codigo, str(API)], check=True)  # noqa: S603 — entrada fixa
 
 
-def test_requirements_espelha_pyproject():
-    import tomllib
+def test_vercel_json_aponta_para_a_entrada_da_api():
+    import json
 
-    deps = tomllib.loads((API / "pyproject.toml").read_text())["project"]["dependencies"]
-    reqs = [
-        linha.strip()
-        for linha in (API / "requirements.txt").read_text().splitlines()
-        if linha.strip() and not linha.startswith("#")
-    ]
-    assert sorted(deps) == sorted(reqs)
+    cfg = json.loads((API.parent / "vercel.json").read_text(encoding="utf-8"))
+    assert "api/app.py" in cfg["functions"]
+    destinos = {r["source"]: r["destination"] for r in cfg["rewrites"]}
+    assert destinos["/api/:path*"] == "/api/app"
+    assert destinos["/health"] == "/api/app"
+    # A SPA é o último recurso: rotas da API vêm antes.
+    assert cfg["rewrites"][-1]["destination"] == "/index.html"
+    assert cfg["outputDirectory"] == "web/dist"

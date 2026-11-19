@@ -64,9 +64,9 @@ A migration parte de `docs/modelo/schema_postgresql.sql` com estes ajustes:
 
 ## D-007 · Hospedagem na Vercel, importador fora dela
 
-**Decisão.** Por ora, o ARC4 é hospedado na Vercel em dois projetos: `arc4-web`, com raiz `web/` e estático, e `arc4-api`, com raiz `api/` e FastAPI como função Python. O banco é o Neon (PostgreSQL). Passo a passo em `docs/DEPLOY_VERCEL.md`.
+**Decisão.** Por ora, o ARC4 é hospedado na Vercel num **projeto único** (`crm-arc4`, com a raiz do repositório como Root Directory). O frontend é publicado como estático (`web/dist`), e a API roda como função Python em `api/app.py`. O `vercel.json` da raiz reescreve `/api/*` e `/health` para a função. O banco é o Neon (PostgreSQL). Passo a passo em `docs/DEPLOY_VERCEL.md`.
 
-**Motivo.** É a hospedagem que o time já usa. Dois projetos evitam o tratamento especial que a Vercel dá à pasta `api/`, e a reescrita `/api/*` mantém um domínio só para o navegador.
+**Motivo.** É a hospedagem que o time já usa. Num projeto só, o domínio é único (sem CORS) e há só uma configuração para manter. A primeira versão previa dois projetos (`web/` e `api/`), mas o projeto foi criado na raiz e a configuração foi ajustada a ele.
 
 **Consequências.**
 - O importador (Fase 2) **não** roda na Vercel, por causa do limite de 4,5 MB por requisição e de 300 s por função. Ele roda como CLI (máquina autorizada ou GitHub Actions) e grava direto no banco.

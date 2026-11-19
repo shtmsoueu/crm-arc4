@@ -24,7 +24,7 @@ A plataforma **não** envia SMS, **não** dispara mensagens e **não** negocia d
 | Testes | pytest (backend), Vitest + Testing Library (frontend), Playwright (fluxos) | |
 | Ambiente local | Docker Compose (postgres + api + web) | |
 | Ferramentas | uv (workspace), Alembic com SQL puro, ruff, ESLint + tsc | D-003 |
-| Hospedagem | Vercel: `arc4-web` (raiz `web/`) + `arc4-api` (raiz `api/`, entrada `api/app.py`) + Neon | D-007, `docs/DEPLOY_VERCEL.md`. Importador roda fora da Vercel |
+| Hospedagem | Vercel, projeto único na raiz: `web/dist` estático + `api/app.py` (FastAPI) via `vercel.json`; banco Neon | D-007, `docs/DEPLOY_VERCEL.md`. Importador roda fora da Vercel |
 
 Se o time escolher outra stack, atualize esta seção antes de escrever código.
 

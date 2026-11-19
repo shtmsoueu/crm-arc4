@@ -1,6 +1,7 @@
-"""Entrada da API na Vercel (projeto com Root Directory = api/).
+"""Entrada da API na Vercel (projeto único, Root Directory = raiz do repositório).
 
-A Vercel procura uma instância FastAPI chamada ``app`` em ``app.py`` na raiz do projeto.
+Cada ``.py`` em ``api/`` vira uma função; esta é a única usada. O ``vercel.json`` da raiz
+reescreve ``/api/*`` e ``/health`` para ela, e a FastAPI vê o caminho original da requisição.
 O código fica em ``src/arc4_api``; o caminho é acrescentado aqui para que a importação
 funcione mesmo que a Vercel instale só as dependências, sem instalar o pacote.
 Fora da Vercel (Docker, `make dev`), use ``arc4_api.main:app`` normalmente.
