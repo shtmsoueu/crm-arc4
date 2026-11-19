@@ -1,0 +1,4 @@
+# Dependências da API para a Vercel (espelham api/pyproject.toml; mantenha os dois iguais).
+fastapi>=0.115
+uvicorn[standard]>=0.32
+psycopg[binary]>=3.2

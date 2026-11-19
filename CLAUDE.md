@@ -24,6 +24,7 @@ A plataforma **não** envia SMS, **não** dispara mensagens e **não** negocia d
 | Testes | pytest (backend), Vitest + Testing Library (frontend), Playwright (fluxos) | |
 | Ambiente local | Docker Compose (postgres + api + web) | |
 | Ferramentas | uv (workspace), Alembic com SQL puro, ruff, ESLint + tsc | D-003 |
+| Hospedagem | Vercel: `arc4-web` (raiz `web/`) + `arc4-api` (raiz `api/`, entrada `api/app.py`) + Neon | D-007, `docs/DEPLOY_VERCEL.md`. Importador roda fora da Vercel |
 
 Se o time escolher outra stack, atualize esta seção antes de escrever código.
 
@@ -108,3 +109,4 @@ Guia: https://brandcenter.btgpactual.com/guia-visual
 - Se "NPL Consumer" (7.522 contratos) é BTG.
 - Regra de confirmação de saída para contrato ausente (proposta: RETIRADA ou confirmação do MIS após 3 cargas).
 - Login próprio ou SSO corporativo; prazo de retenção dos arquivos originais.
+- Se o plano Hobby da Vercel permite este uso, e aval de LGPD para dados reais na Vercel/Neon (D-007).

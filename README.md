@@ -5,6 +5,7 @@ Plataforma de consulta, análise e rastreabilidade da carteira ARC4 (27 arquivos
 - Instruções de trabalho e regras de negócio: [`CLAUDE.md`](CLAUDE.md)
 - Fases e critérios de aceite: [`docs/BACKLOG.md`](docs/BACKLOG.md)
 - Decisões e riscos: [`docs/DECISOES.md`](docs/DECISOES.md)
+- Implantação na Vercel: [`docs/DEPLOY_VERCEL.md`](docs/DEPLOY_VERCEL.md)
 - Proposta completa: [`docs/proposta/`](docs/proposta/Proposta_Remodelagem_CRM_ARC4.md)
 
 ## Estrutura
