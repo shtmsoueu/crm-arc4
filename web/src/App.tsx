@@ -5,6 +5,8 @@ import { EPS, rotuloEps } from './eps';
 function EstadoApi({ dados, erro, carregando }: { dados?: Saude; erro: boolean; carregando: boolean }) {
   if (carregando) return <span className="estado estado--neutro">Verificando…</span>;
   if (erro || !dados) return <span className="estado estado--erro">API indisponível</span>;
+  if (dados.banco === 'nao_configurado')
+    return <span className="estado estado--alerta">API ativa, banco não configurado</span>;
   if (dados.banco !== 'ok') return <span className="estado estado--alerta">API ativa, banco indisponível</span>;
   return <span className="estado estado--ok">Operacional</span>;
 }

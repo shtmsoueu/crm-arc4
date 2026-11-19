@@ -41,6 +41,12 @@ describe('App', () => {
     expect(await screen.findByText('API ativa, banco indisponível')).toBeInTheDocument();
   });
 
+  it('diz quando o banco ainda não foi configurado', async () => {
+    respostaApi(503, { status: 'degradado', versao: '0.1.0', banco: 'nao_configurado', migracao: null });
+    renderizar();
+    expect(await screen.findByText('API ativa, banco não configurado')).toBeInTheDocument();
+  });
+
   it('avisa quando a API não responde', async () => {
     vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new TypeError('falha de rede')));
     renderizar();

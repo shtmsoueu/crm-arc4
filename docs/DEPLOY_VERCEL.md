@@ -24,16 +24,21 @@ Não mude esses campos no painel: o `vercel.json` é a fonte da configuração e
 
 ## 2. Banco
 
-1. No painel: **Storage → Create Database → Neon (Postgres)** e conecte ao projeto `crm-arc4`. A variável `DATABASE_URL` é criada sozinha.
-2. Aplique as migrations **da sua máquina** (a API não migra sozinha, de propósito):
+1. No painel: **Storage → Create Database → Neon (Postgres)** e conecte ao projeto `crm-arc4` (ambientes Production e Preview).
+2. Em **Deployments**, clique em **⋯ → Redeploy** na implantação mais recente. A Vercel só entrega variáveis novas a implantações novas.
+3. Pronto. **Não é preciso rodar nada no terminal:** na primeira requisição, a API cria as tabelas sozinha (migração automática, D-007).
 
-```bash
-DATABASE_URL='<url do Neon, com sslmode=require>' make migrate
-```
+A API aceita os nomes que a integração cria: `DATABASE_URL` ou `POSTGRES_URL` para o uso normal; `DATABASE_URL_UNPOOLED` ou `POSTGRES_URL_NON_POOLING`, se existirem, para a migração.
 
-Reaplicar é seguro. Rode de novo sempre que um PR trouxer migration nova.
+Conferência em `https://<seu-projeto>.vercel.app/api/health`:
 
-3. Conferência: `https://<seu-projeto>.vercel.app/api/health` deve responder `{"status":"ok","banco":"ok","migracao":"0001"}`. Sem banco configurado, responde 503 com `"banco":"indisponivel"`.
+| Resposta | Significado |
+| --- | --- |
+| `"banco":"ok","migracao":"0001"` | Tudo certo |
+| `"banco":"nao_configurado"` | Nenhuma variável de banco chegou à função: confira a integração e reimplante |
+| `"banco":"indisponivel"` | A variável existe, mas a conexão falhou; `migracao_erro` mostra o tipo do erro |
+
+Para desligar a migração automática (ex.: aplicar à mão com `make migrate`), defina `ARC4_AUTO_MIGRATE=0`.
 
 ## Limites da Vercel que afetam o projeto
 
